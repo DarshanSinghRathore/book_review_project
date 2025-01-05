@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Book Reviews</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> 
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #ff0077, #00bfff);
+            color: white;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Menu Styles */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            width: 100%;
+            padding: 10px;
+            z-index: 100;
+        }
+
+        .menu a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            background-color: #444;
+        }
+
+        /* Background Styles (Removed blur effect) */
+        .blur-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://ew.com/thmb/xAcUP70znVWBI9m1yqUXHrnNKLE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/best-books-non-fiction-2000-5e7250b88a1c4972a47f527417133a8a.jpg') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        .container {
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            margin-top: 50px;
+            overflow-y: auto;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Section for Book Suggestions */
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 500px;
+            background-color: #222;
+            color: white;
+        }
+
+        .search-bar button {
+            padding: 10px;
+            background-color: #3498db;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .search-bar button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Review Form Styles */
+        .add-review {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .add-review h3 {
+            text-align: center;
+            font-style: italic;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .review-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: white;
+        }
+
+        .review-submit {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        /* Book Review Display Styles */
+        .review-block {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #00bfff, #ff0077);
+            transition: transform 0.3s;
+        }
+
+        .review-block:hover {
+            transform: scale(1.05);
+        }
+
+        .review-block h4 {
+            font-style: italic;
+            font-size: 22px;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .review-block p {
+            color: #fff;
+        }
+
+        /* Footer and About Us Styles */
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: white;
+        }
+
+        /* Styling Login / SignUp Form */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .auth-form input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: white;
+        }
+
+        .auth-form button {
+            padding: 10px;
+            background-color: #3498db;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-bar input {
+                width: 90%;
+            }
+
+            .review-block {
+                padding: 15px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="menu">
+        <a href="#about-us">About Us</a>
+        <a href="#add-book-review">Add Book Review</a>
+        <a href="#book-suggestions">Book Suggestions</a>
+        <a href="#login">Login</a>
+    </div>
+
+    <div class="blur-background"></div>
+
+    <div class="container">
+
+        <!-- Book Suggestions Section -->
+        <div id="book-suggestions">
+            <div class="search-bar">
+                <input type="text" id="search-query" placeholder="Search for a book...">
+                <button onclick="fetchBookSuggestions()">Search</button>
+            </div>
+
+            <div id="book-results"></div>
+        </div>
+
+        <!-- Add Book Review Section -->
+        <div id="add-book-review" class="add-review">
+            <h3>Add Your Book Review</h3>
+            <textarea class="review-input" id="book-review-input" placeholder="Write your review here..." rows="5"></textarea>
+            <input type="text" class="review-input" id="book-name-input" placeholder="Book Name">
+            <button class="review-submit" onclick="saveReview()">Submit Review</button>
+        </div>
+
+        <!-- Display Book Reviews -->
+        <div id="book-reviews">
+            <h2>Recent Book Reviews</h2>
+            <!-- No auto-generated reviews -->
+        </div>
+
+        <!-- Footer -->
+        <div id="about-us" class="footer">
+            <p>Created by Darshan Singh Rathore, 2025. Under Development. Auto Generate Book Reviews.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Function to fetch book suggestions from Google Books API
+        function fetchBookSuggestions() {
+            const query = document.getElementById('search-query').value;
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=5`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.items;
+                    let resultHTML = '';
+                    results.forEach(book => {
+                        const title = book.volumeInfo.title;
+                        const author = book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'Unknown Author';
+                        const thumbnail = book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : 'https://via.placeholder.com/100';
+                        resultHTML += `
+                            <div class="review-block">
+                                <h4>${title} by ${author}</h4>
+                                <img src="${thumbnail}" alt="Book Thumbnail" style="width: 100px; height: 150px;">
+                            </div>
+                        `;
+                    });
+                    document.getElementById('book-results').innerHTML = resultHTML;
+                })
+                .catch(err => console.log(err));
+        }
+
+        // Function to save a book review and display it
+        function saveReview() {
+            const bookName = document.getElementById('book-name-input').value;
+            const reviewText = document.getElementById('book-review-input').value;
+
+            if (bookName && reviewText) {
+                const reviewHTML = `
+                    <div class="review-block">
+                        <h4 style="font-style: italic;">${bookName}</h4>
+                        <p>${reviewText}</p>
+                    </div>
+                `;
+                document.getElementById('book-reviews').innerHTML += reviewHTML;
+
+                // Clear the inputs
+                document.getElementById('book-name-input').value = '';
+                document.getElementById('book-review-input').value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
+
